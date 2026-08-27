@@ -69,8 +69,8 @@ This website is an unversioned deployment unit. It does not publish a package or
 meaningful versioned artifact, so Commitizen bump and release recipes are intentionally
 absent. A Pages deployment is not a product release.
 
-The first-party license is preserved from the source monorepo pending an explicit license
-decision. See `LICENSE`. Promoted brand SVGs use system font names and embed no font
+The first-party source is licensed under the [MIT License](LICENSE). Promoted brand SVGs
+use system font names and embed no font
 software; the source monorepo's unnotified Space Grotesk binaries were not promoted.
 
 ## Migration history
