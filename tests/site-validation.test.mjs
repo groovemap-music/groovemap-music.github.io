@@ -78,6 +78,12 @@ test('keeps the Astro root-site and active deployment contracts', async () => {
   assert.match(pagesWorkflow, /id-token: write/u);
   assert.match(pagesWorkflow, /environment:\n\s+name: github-pages/u);
   assert.match(pagesWorkflow, /uses: [^@]+@[0-9a-f]{40}/u);
+  assert.match(pagesWorkflow, /uses: actions\/setup-node@[0-9a-f]{40}/u);
+  assert.match(
+    pagesWorkflow,
+    /uses: actions\/upload-pages-artifact@[0-9a-f]{40}/u,
+  );
+  assert.doesNotMatch(pagesWorkflow, /uses: withastro\/action@/u);
 });
 
 test('declares an unversioned non-publishable package with no release hooks', async () => {
