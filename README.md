@@ -48,16 +48,14 @@ it does not emulate GitHub Pages configuration or DNS.
 
 ## Deployment
 
-The official Astro/Pages workflow is staged as
-`.github/workflows/pages.yml.disabled`. GitHub ignores that filename, so it cannot deploy.
-After all approvals in [the Pages runbook](docs/pages-runbook.md), activation is a
-reviewed rename to `pages.yml`. The staged workflow uses only fully pinned Actions,
-the `github-pages` environment, deployment concurrency, and the minimum deployment
+The official Astro/Pages workflow is active at `.github/workflows/pages.yml` and deploys
+validated `main` builds through GitHub Actions. It uses only fully pinned Actions, the
+`github-pages` environment, deployment concurrency, and the minimum deployment
 permissions (`contents: read`, `pages: write`, `id-token: write`).
 
-`public/CNAME` documents the intended custom domain and follows Astro's deployment
-guidance. GitHub's current custom-workflow behavior still requires configuring the domain
-in Pages settings; a CNAME file alone does not mutate that setting or DNS.
+`public/CNAME` documents the custom domain and follows Astro's deployment guidance. Pages
+settings are managed from `groovemap-music/infra`; Cloudflare records are managed from the
+homelab Cloudflare module. A CNAME file alone does not mutate either system.
 
 ## Versioning, release, and license
 

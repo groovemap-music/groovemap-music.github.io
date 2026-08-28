@@ -1,29 +1,28 @@
-# GitHub Pages activation runbook
+# GitHub Pages operations runbook
 
-The repository is public, but its deployment controls remain intentionally inactive:
+The site uses GitHub Actions to deploy the static Astro build from `main`:
 
-- Pages source is not enabled;
-- the custom domain is not configured in GitHub Pages;
-- apex and `www` DNS records are not managed for Pages;
-- HTTPS enforcement is not enabled; and
-- the deployment workflow remains staged as `.github/workflows/pages.yml.disabled`.
+- deployment workflow: `.github/workflows/pages.yml`;
+- custom domain: `groovemap.music`;
+- Pages configuration owner: `groovemap-music/infra`;
+- DNS configuration owner: the homelab Cloudflare OpenTofu module; and
+- canonical output: static files under `dist/`.
 
-Public repository visibility does not authorize any of those external changes.
+Do not edit Pages or DNS settings in provider dashboards. Review the corresponding
+OpenTofu plan before each apply.
 
-## Activation sequence
+## Change sequence
 
 1. Revalidate the tree for secrets, licensing, attribution, accessibility, metadata,
    canonical URLs, and intended public exposure.
-2. Configure GitHub Pages to use GitHub Actions with the custom domain
-   `groovemap.music`.
-3. Rename `.github/workflows/pages.yml.disabled` to `pages.yml` in a reviewed change.
-4. Inventory the live apex and `www` DNS records, TTLs, provider, and rollback values.
-5. Review and approve the complete DNS plan before applying it.
-6. After DNS propagates, verify the Pages URL, apex and `www` behavior, certificate
+2. Update the GitHub Pages configuration in `groovemap-music/infra` before changing DNS.
+3. Inventory the live apex and `www` DNS records, TTLs, provider, and rollback values.
+4. Review and approve the complete DNS plan before applying it.
+5. After DNS propagates, verify the Pages URL, apex and `www` behavior, certificate
    issuance, asset paths, internal links, responsive layout, and the 404 page.
-7. Enable HTTPS enforcement only after certificate health is confirmed.
+6. Enable HTTPS enforcement only after certificate health is confirmed.
 
-Configure the custom domain in GitHub Pages before adding DNS records; this ordering
+Keep the custom domain configured in GitHub Pages before adding or replacing DNS records; this ordering
 avoids a domain-takeover window. Do not add wildcard DNS records.
 
 ## Verification

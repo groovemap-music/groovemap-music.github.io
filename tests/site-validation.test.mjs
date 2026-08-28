@@ -61,7 +61,7 @@ test('extracts references and fragment identifiers from HTML', () => {
   assert.deepEqual([...idsFromHtml(html)], ['content']);
 });
 
-test('keeps the Astro root-site and disabled deployment contracts', async () => {
+test('keeps the Astro root-site and active deployment contracts', async () => {
   const astroConfig = await readFile(
     path.join(repositoryRoot, 'astro.config.mjs'),
     'utf8',
@@ -70,7 +70,7 @@ test('keeps the Astro root-site and disabled deployment contracts', async () => 
   assert.doesNotMatch(astroConfig, /\bbase\s*:/u);
 
   const pagesWorkflow = await readFile(
-    path.join(repositoryRoot, '.github', 'workflows', 'pages.yml.disabled'),
+    path.join(repositoryRoot, '.github', 'workflows', 'pages.yml'),
     'utf8',
   );
   assert.match(pagesWorkflow, /contents: read/u);

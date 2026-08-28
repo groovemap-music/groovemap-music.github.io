@@ -11,5 +11,6 @@ must never depend on secrets at build or run time.
   deterministic render outputs and update `public/brand/provenance.json`; do not edit
   promoted SVGs independently.
 - Keep internal links root-relative and accessible without client-side JavaScript.
-- Do not activate the staged Pages workflow, enable Pages, or change DNS without the
-  separate approvals documented in `docs/pages-runbook.md`.
+- Keep the Pages workflow on the official Astro/GitHub Actions deployment path with
+  least-privilege permissions. Pages and DNS settings remain declarative as documented in
+  `docs/pages-runbook.md`.
