@@ -4,10 +4,6 @@ This is the static Astro source for [groovemap.music](https://groovemap.music), 
 organization website for `groovemap-music`. It introduces GrooveMap's music knowledge
 graph and links visitors to the project's public work.
 
-> Migration state: locally prepared only. The GitHub repository does not yet exist, this
-> tree has not been pushed, and public visibility, Pages, custom-domain settings, DNS,
-> and HTTPS are all separate approval gates.
-
 ## Architecture boundary
 
 Astro prerenders every route to static HTML. There is no server adapter, client-side
@@ -54,7 +50,7 @@ it does not emulate GitHub Pages configuration or DNS.
 
 The official Astro/Pages workflow is staged as
 `.github/workflows/pages.yml.disabled`. GitHub ignores that filename, so it cannot deploy.
-After all approvals in [deployment-gates.md](docs/deployment-gates.md), activation is a
+After all approvals in [the Pages runbook](docs/pages-runbook.md), activation is a
 reviewed rename to `pages.yml`. The staged workflow uses only fully pinned Actions,
 the `github-pages` environment, deployment concurrency, and the minimum deployment
 permissions (`contents: read`, `pages: write`, `id-token: write`).
@@ -72,10 +68,3 @@ absent. A Pages deployment is not a product release.
 The first-party source is licensed under the [MIT License](LICENSE). Promoted brand SVGs
 use system font names and embed no font
 software; the source monorepo's unnotified Space Grotesk binaries were not promoted.
-
-## Migration history
-
-There was no pre-existing Astro organization-site path to filter from the monorepo. The
-destination begins with this reviewed site tree rather than manufacturing unrelated
-history. Brand asset lineage is retained through the infra commit and byte digests in
-`public/brand/provenance.json`. The original monorepo remains unchanged.

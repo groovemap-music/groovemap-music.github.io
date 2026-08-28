@@ -80,7 +80,7 @@ test('keeps the Astro root-site and disabled deployment contracts', async () => 
   assert.match(pagesWorkflow, /uses: [^@]+@[0-9a-f]{40}/u);
 });
 
-test('declares an unversioned private package with no publication hooks', async () => {
+test('declares an unversioned non-publishable package with no release hooks', async () => {
   const manifest = JSON.parse(
     await readFile(path.join(repositoryRoot, 'package.json'), 'utf8'),
   );
