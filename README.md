@@ -66,3 +66,5 @@ absent. A Pages deployment is not a product release.
 The first-party source is licensed under the [MIT License](LICENSE). Promoted brand SVGs
 use system font names and embed no font
 software; the source monorepo's unnotified Space Grotesk binaries were not promoted.
+
+See the [documentation index](docs/README.md) for the GitHub Pages runbook.
