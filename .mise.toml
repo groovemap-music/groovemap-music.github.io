@@ -1,4 +1,6 @@
 [tools]
+actionlint = "1.7.12"
+gitleaks = "8.30.1"
 node = "24.20.0"
 "npm:npm" = "12.0.2"
 just = "1.57.0"

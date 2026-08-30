@@ -12,6 +12,11 @@ import {
   normalizeInternalReference,
   referencesFromHtml,
 } from './site-validation.mjs';
+import {
+  designRepository,
+  designRevision,
+  promotedAssets,
+} from './brand-contract.mjs';
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -46,17 +51,30 @@ async function validateBrandProvenance() {
     'provenance.json',
   );
   const provenance = JSON.parse(await readFile(provenancePath, 'utf8'));
-  if (!/^[0-9a-f]{40}$/u.test(provenance.canonicalRevision)) {
-    report('brand provenance must name a full 40-character infra commit');
+  if (provenance.canonicalRepository !== designRepository) {
+    report(
+      `brand provenance must name the public design repository ${designRepository}`,
+    );
+  }
+  if (provenance.canonicalRevision !== designRevision) {
+    report(
+      `brand provenance must name the pinned full design commit ${designRevision}`,
+    );
   }
 
-  for (const asset of provenance.assets) {
+  if (JSON.stringify(provenance.assets) !== JSON.stringify(promotedAssets)) {
+    report(
+      'brand provenance asset contract does not match the reviewed design outputs',
+    );
+  }
+
+  for (const asset of promotedAssets) {
     const assetPath = path.join(repositoryRoot, asset.destination);
     const digest = createHash('sha256')
       .update(await readFile(assetPath))
       .digest('hex');
     if (digest !== asset.sha256) {
-      report(`${asset.destination} does not match its canonical infra digest`);
+      report(`${asset.destination} does not match its pinned design digest`);
     }
   }
 }

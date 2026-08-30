@@ -31,8 +31,8 @@
       "source": "brand/assets/site.webmanifest"
     }
   ],
-  "canonicalRepository": "groovemap-music/infra",
-  "canonicalRevision": "33fd6d2647612cf32a9f2e69689b9c432204148d",
+  "canonicalRepository": "https://github.com/groovemap-music/design",
+  "canonicalRevision": "59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d",
   "editableSources": [
     "brand/tokens.json",
     "brand/templates/"
