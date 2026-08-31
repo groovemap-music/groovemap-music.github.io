@@ -8,15 +8,30 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
+  validation:
+    uses: groovemap-music/automation/.github/workflows/reusable-ci.yml@2f34a4da5c552bc23c75edd3d8d81be0a4b3271c
+    with:
+      runner: ubuntu-24.04
+      language: node
+      setup-command: just setup
+      check-command: just ci-check
+      coverage-command: just coverage
+      audit-command: just audit
+      license-command: just license-check
+      secret-scan-command: just security
+      package-command: just build
+      install-command: just install-check
+      coverage-files: coverage/lcov.info
+      coverage-flags: website
+
   build:
+    needs: validation
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -46,6 +61,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
