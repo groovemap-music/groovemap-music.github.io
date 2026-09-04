@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",
-    "astro": "7.2.8"
+    "astro": "7.2.9"
   },
   "description": "The static GrooveMap organization website",
   "devDependencies": {
