@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -7,6 +6,7 @@ import { HtmlValidate } from 'html-validate';
 
 import {
   assertReferenceExists,
+  brandProvenanceErrors,
   canonicalOrigin,
   idsFromHtml,
   normalizeInternalReference,
@@ -44,38 +44,14 @@ function report(message) {
 }
 
 async function validateBrandProvenance() {
-  const provenancePath = path.join(
+  for (const message of await brandProvenanceErrors({
+    designRepository,
+    designRevision,
+    outputRoot,
+    promotedAssets,
     repositoryRoot,
-    'public',
-    'brand',
-    'provenance.json',
-  );
-  const provenance = JSON.parse(await readFile(provenancePath, 'utf8'));
-  if (provenance.canonicalRepository !== designRepository) {
-    report(
-      `brand provenance must name the public design repository ${designRepository}`,
-    );
-  }
-  if (provenance.canonicalRevision !== designRevision) {
-    report(
-      `brand provenance must name the pinned full design commit ${designRevision}`,
-    );
-  }
-
-  if (JSON.stringify(provenance.assets) !== JSON.stringify(promotedAssets)) {
-    report(
-      'brand provenance asset contract does not match the reviewed design outputs',
-    );
-  }
-
-  for (const asset of promotedAssets) {
-    const assetPath = path.join(repositoryRoot, asset.destination);
-    const digest = createHash('sha256')
-      .update(await readFile(assetPath))
-      .digest('hex');
-    if (digest !== asset.sha256) {
-      report(`${asset.destination} does not match its pinned design digest`);
-    }
+  })) {
+    report(message);
   }
 }
 
