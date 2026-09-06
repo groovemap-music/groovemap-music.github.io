@@ -11,10 +11,16 @@ application runtime, secret, authentication flow, analytics collector, or enviro
 dependent content. The canonical URL is `https://groovemap.music`; this organization
 site is served from `/`, so `astro.config.mjs` intentionally has no `base` property.
 
-Canonical editable design tokens and templates live in the private
-`groovemap-music/infra` repository. Files under `public/brand` are promoted,
-deterministic render outputs. `public/brand/provenance.json` records the source revision,
-path, and SHA-256 digest for every promoted asset.
+Canonical editable design tokens and templates live in the public
+[`groovemap-music/design`](https://github.com/groovemap-music/design) repository. Files
+under `public/brand` are byte-identical deterministic render outputs promoted from the
+full design commit recorded in [`public/brand/provenance.json`](public/brand/provenance.json).
+That file also records each source path and SHA-256 digest. Set
+`GROOVEMAP_DESIGN_REPO` to a clean checkout at
+`59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d` before running `just promote-brand`; the
+promotion command refuses any other revision. Use of the GrooveMap name and logos is
+governed separately by the design repository's
+[trademark-use policy](https://github.com/groovemap-music/design/blob/main/TRADEMARKS.md).
 
 ## Setup and development
 
@@ -38,10 +44,10 @@ just build
 just preview
 ```
 
-`just check` runs formatting, Astro-aware lint and type checks, unit tests, a production
-build, generated HTML/accessibility/link/asset/metadata validation, and a locked-
-dependency license policy check. `just audit` is separate because it intentionally
-contacts an advisory service.
+`just check` runs formatting, Astro-aware lint and type checks, unit and automation
+contract tests, a production build, generated HTML/accessibility/link/asset/metadata
+validation, locked-dependency license policy, and repository/history secret scans.
+`just audit` is separate because it intentionally contacts an advisory service.
 
 The generated site is written to ignored `dist/`. Local preview is a static-file check;
 it does not emulate GitHub Pages configuration or DNS.
@@ -49,13 +55,17 @@ it does not emulate GitHub Pages configuration or DNS.
 ## Deployment
 
 The official Astro/Pages workflow is active at `.github/workflows/pages.yml` and deploys
-validated `main` builds through GitHub Actions. It uses only fully pinned Actions, the
-`github-pages` environment, deployment concurrency, and the minimum deployment
-permissions (`contents: read`, `pages: write`, `id-token: write`).
+validated `main` builds through GitHub Actions. CI and the Pages validation gate both pin
+the public `groovemap-music/automation` reusable workflow by a full reviewed commit.
+Ordinary and Dependabot-authored pull requests use the same required CI job graph with no
+actor-specific skips. Pages uses only fully pinned Actions, the `github-pages`
+environment, deployment concurrency, and job-scoped minimum permissions (`contents:
+read` for validation/build; `pages: write` and `id-token: write` for deployment).
 
 `public/CNAME` documents the custom domain and follows Astro's deployment guidance. Pages
-settings are managed from `groovemap-music/infra`; Cloudflare records are managed from the
-homelab Cloudflare module. A CNAME file alone does not mutate either system.
+settings are managed from the private `groovemap-music/infra` repository; Cloudflare
+records are managed from the homelab Cloudflare module. A CNAME file alone does not
+mutate either system.
 
 ## Versioning, release, and license
 

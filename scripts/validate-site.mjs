@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -7,11 +6,17 @@ import { HtmlValidate } from 'html-validate';
 
 import {
   assertReferenceExists,
+  brandProvenanceErrors,
   canonicalOrigin,
   idsFromHtml,
   normalizeInternalReference,
   referencesFromHtml,
 } from './site-validation.mjs';
+import {
+  designRepository,
+  designRevision,
+  promotedAssets,
+} from './brand-contract.mjs';
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -39,25 +44,14 @@ function report(message) {
 }
 
 async function validateBrandProvenance() {
-  const provenancePath = path.join(
+  for (const message of await brandProvenanceErrors({
+    designRepository,
+    designRevision,
+    outputRoot,
+    promotedAssets,
     repositoryRoot,
-    'public',
-    'brand',
-    'provenance.json',
-  );
-  const provenance = JSON.parse(await readFile(provenancePath, 'utf8'));
-  if (!/^[0-9a-f]{40}$/u.test(provenance.canonicalRevision)) {
-    report('brand provenance must name a full 40-character infra commit');
-  }
-
-  for (const asset of provenance.assets) {
-    const assetPath = path.join(repositoryRoot, asset.destination);
-    const digest = createHash('sha256')
-      .update(await readFile(assetPath))
-      .digest('hex');
-    if (digest !== asset.sha256) {
-      report(`${asset.destination} does not match its canonical infra digest`);
-    }
+  })) {
+    report(message);
   }
 }
 
