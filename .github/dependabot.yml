@@ -14,3 +14,6 @@ updates:
       day: monday
     labels: [dependencies, javascript]
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: typescript
+        versions: ['7.x']
