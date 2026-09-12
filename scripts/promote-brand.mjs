@@ -1,19 +1,13 @@
-import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { copyFile, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import {
   designRepository,
   designRevision,
   promotedAssets,
 } from './brand-contract.mjs';
-
-const repositoryRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-);
+import { repositoryRoot, sha256File } from './filesystem.mjs';
 const designRoot = process.env.GROOVEMAP_DESIGN_REPO;
 
 if (!designRoot) {
@@ -44,8 +38,7 @@ execFileSync(
 
 for (const asset of promotedAssets) {
   const sourcePath = path.join(designRoot, asset.source);
-  const sourceBytes = await readFile(sourcePath);
-  const sourceDigest = createHash('sha256').update(sourceBytes).digest('hex');
+  const sourceDigest = await sha256File(sourcePath);
   if (sourceDigest !== asset.sha256) {
     throw new Error(
       `${asset.source} does not match its reviewed design digest`,

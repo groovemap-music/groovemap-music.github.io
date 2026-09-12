@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+import { repositoryRoot as root } from './filesystem.mjs';
+
 const workflows = path.join(root, '.github', 'workflows');
 const automationRevision = '2f34a4da5c552bc23c75edd3d8d81be0a4b3271c';
 const reusableCaller = `uses: groovemap-music/automation/.github/workflows/reusable-ci.yml@${automationRevision}`;

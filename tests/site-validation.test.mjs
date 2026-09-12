@@ -6,8 +6,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
+import { brandProvenanceErrors } from '../scripts/brand-validation.mjs';
 import {
-  brandProvenanceErrors,
   canonicalOrigin,
   deployedAssetPath,
   idsFromHtml,
@@ -16,6 +16,7 @@ import {
   referencesFromHtml,
 } from '../scripts/site-validation.mjs';
 import {
+  brandContractErrors,
   designRepository,
   designRevision,
   promotedAssets,
@@ -169,6 +170,33 @@ test('maps every promoted brand file onto its deployed copy', () => {
   assert.equal(
     deployedAssetPath('/tmp/dist', 'public/site.webmanifest'),
     '/tmp/dist/site.webmanifest',
+  );
+});
+
+test('validates brand contract state without filesystem access', () => {
+  const [asset] = promotedAssets;
+  assert.deepEqual(
+    brandContractErrors({
+      assetDigests: [
+        {
+          asset,
+          deployedDigest: asset.sha256,
+          deployedPath: 'dist/brand/favicon.svg',
+          sourceDigest: asset.sha256,
+        },
+      ],
+      designRepository,
+      designRevision,
+      deployedProvenancePath: 'dist/brand/provenance.json',
+      promotedAssets: [asset],
+      provenance: {
+        assets: [asset],
+        canonicalRepository: designRepository,
+        canonicalRevision: designRevision,
+      },
+      provenanceMatchesDeployment: true,
+    }),
+    [],
   );
 });
 
