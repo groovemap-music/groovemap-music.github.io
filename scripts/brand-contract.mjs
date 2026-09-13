@@ -1,6 +1,56 @@
 export const designRepository = 'https://github.com/groovemap-music/design';
 export const designRevision = '59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d';
 
+export function brandContractErrors({
+  assetDigests,
+  designRepository,
+  designRevision,
+  deployedProvenancePath,
+  promotedAssets,
+  provenance,
+  provenanceMatchesDeployment,
+}) {
+  const errors = [];
+  if (provenance.canonicalRepository !== designRepository) {
+    errors.push(
+      `brand provenance must name the public design repository ${designRepository}`,
+    );
+  }
+  if (provenance.canonicalRevision !== designRevision) {
+    errors.push(
+      `brand provenance must name the pinned full design commit ${designRevision}`,
+    );
+  }
+  if (JSON.stringify(provenance.assets) !== JSON.stringify(promotedAssets)) {
+    errors.push(
+      'brand provenance asset contract does not match the reviewed design outputs',
+    );
+  }
+
+  for (const {
+    asset,
+    deployedDigest,
+    deployedPath,
+    sourceDigest,
+  } of assetDigests) {
+    if (sourceDigest !== asset.sha256) {
+      errors.push(
+        `${asset.destination} does not match its pinned design digest`,
+      );
+    }
+    if (deployedDigest !== asset.sha256) {
+      errors.push(`${deployedPath} does not match its pinned design digest`);
+    }
+  }
+
+  if (!provenanceMatchesDeployment) {
+    errors.push(
+      `${deployedProvenancePath} does not match the reviewed brand provenance`,
+    );
+  }
+  return errors;
+}
+
 export const promotedAssets = [
   {
     destination: 'public/brand/favicon.svg',
