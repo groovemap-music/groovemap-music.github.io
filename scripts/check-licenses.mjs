@@ -1,14 +1,9 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const repositoryRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-);
-const lock = JSON.parse(
-  await readFile(path.join(repositoryRoot, 'package-lock.json'), 'utf8'),
-);
+import { pathExists, readJson, repositoryRoot } from './filesystem.mjs';
+
+const lock = await readJson(path.join(repositoryRoot, 'package-lock.json'));
 const allowedTokens = new Set([
   '0BSD',
   'Apache-2.0',
@@ -24,11 +19,8 @@ const allowedTokens = new Set([
 ]);
 const failures = [];
 let inspectedPackages = 0;
-const policy = JSON.parse(
-  await readFile(
-    path.join(repositoryRoot, 'docs', 'dependency-license-policy.json'),
-    'utf8',
-  ),
+const policy = await readJson(
+  path.join(repositoryRoot, 'docs', 'dependency-license-policy.json'),
 );
 const exceptions = new Map(
   policy.exceptions.map((exception) => [
@@ -83,10 +75,9 @@ for (const lockPath of Object.keys(lock.packages)) {
   }
 }
 
-const rootFiles = new Set(await readdir(repositoryRoot));
-if (!rootFiles.has('LICENSE'))
+if (!(await pathExists(path.join(repositoryRoot, 'LICENSE'))))
   failures.push('repository: missing first-party LICENSE');
-if (!rootFiles.has('THIRD_PARTY_NOTICES.md'))
+if (!(await pathExists(path.join(repositoryRoot, 'THIRD_PARTY_NOTICES.md'))))
   failures.push('repository: missing THIRD_PARTY_NOTICES.md');
 
 const notice = await readFile(

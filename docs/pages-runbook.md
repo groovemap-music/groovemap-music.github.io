@@ -2,10 +2,10 @@
 
 The site uses GitHub Actions to deploy the static Astro build from `main`:
 
-- deployment workflow: `.github/workflows/pages.yml`;
+- deployment workflow: [`.github/workflows/pages.yml`](../.github/workflows/pages.yml);
 - custom domain: `groovemap.music`;
-- Pages configuration owner: `groovemap-music/infra`;
-- DNS configuration owner: the homelab Cloudflare OpenTofu module; and
+- Pages configuration owner: the private `groovemap-music/infra` repository;
+- DNS configuration owner: the private `SimplicityGuy/homelab` Cloudflare OpenTofu module; and
 - canonical output: static files under `dist/`.
 
 Do not edit Pages or DNS settings in provider dashboards. Review the corresponding
@@ -22,8 +22,8 @@ OpenTofu plan before each apply.
    issuance, asset paths, internal links, responsive layout, and the 404 page.
 6. Enable HTTPS enforcement only after certificate health is confirmed.
 
-Keep the custom domain configured in GitHub Pages before adding or replacing DNS records; this ordering
-avoids a domain-takeover window. Do not add wildcard DNS records.
+Keep the custom domain configured in GitHub Pages before adding or replacing DNS records; this
+ordering avoids a domain-takeover window. Do not add wildcard DNS records.
 
 ## Verification
 
@@ -36,11 +36,17 @@ git status --short
 gh repo view groovemap-music/groovemap-music.github.io \
   --json nameWithOwner,visibility,defaultBranchRef,url
 gh api repos/groovemap-music/groovemap-music.github.io/pages
+dig +short groovemap.music A
+dig +short groovemap.music AAAA
+dig +short www.groovemap.music CNAME
 curl --fail --silent --show-error --location --output /dev/null https://groovemap.music/
+curl --fail --silent --show-error --location --output /dev/null https://www.groovemap.music/
 curl --fail --silent --show-error --location --output /dev/null https://groovemap.music/about/
 curl --fail --silent --show-error --location --output /dev/null https://groovemap.music/404.html
 ```
 
-Inspect desktop and mobile layouts, keyboard navigation, reduced-motion behavior, the
-rendered Open Graph image, sitemap, robots, manifest, favicon, and canonical URLs. An
-empty post-apply OpenTofu plan is required after activation.
+The Pages response must report a workflow build from `main`, the `groovemap.music` custom domain,
+and HTTPS enforcement. DNS must return GitHub Pages' documented apex A/AAAA records and the
+`groovemap-music.github.io` `www` CNAME. Inspect desktop and mobile layouts, keyboard navigation,
+reduced-motion behavior, the rendered Open Graph image, sitemap, robots, manifest, favicon, and
+canonical URLs. An empty post-apply OpenTofu plan is required after activation.

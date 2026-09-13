@@ -1,49 +1,32 @@
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 
 import { HtmlValidate } from 'html-validate';
 
+import { brandProvenanceErrors } from './brand-validation.mjs';
 import {
-  assertReferenceExists,
-  brandProvenanceErrors,
   canonicalOrigin,
   idsFromHtml,
   normalizeInternalReference,
+  outputPathForUrl,
   referencesFromHtml,
 } from './site-validation.mjs';
+import {
+  filesUnder,
+  pathExists,
+  readJson,
+  repositoryRoot,
+} from './filesystem.mjs';
 import {
   designRepository,
   designRevision,
   promotedAssets,
 } from './brand-contract.mjs';
 
-const repositoryRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-);
 const outputRoot = path.join(repositoryRoot, 'dist');
-const errors = [];
 
-async function filesUnder(directory) {
-  const entries = await readdir(directory, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const candidate = path.join(directory, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await filesUnder(candidate)));
-    } else {
-      files.push(candidate);
-    }
-  }
-  return files;
-}
-
-function report(message) {
-  errors.push(message);
-}
-
-async function validateBrandProvenance() {
+async function validateBrandProvenance(report) {
   for (const message of await brandProvenanceErrors({
     designRepository,
     designRevision,
@@ -55,7 +38,7 @@ async function validateBrandProvenance() {
   }
 }
 
-async function validateHtmlFile(htmlPath, htmlValidate) {
+async function validateHtmlFile(htmlPath, htmlValidate, report) {
   const relativePath = path.relative(outputRoot, htmlPath);
   const pathname =
     relativePath === 'index.html'
@@ -106,15 +89,13 @@ async function validateHtmlFile(htmlPath, htmlValidate) {
       continue;
     }
 
-    try {
-      await assertReferenceExists(outputRoot, url);
-    } catch {
+    if (!(await pathExists(outputPathForUrl(outputRoot, url)))) {
       report(`${relativePath} references missing output ${url.pathname}`);
     }
   }
 }
 
-async function validateStaticContract() {
+async function validateStaticContract(report) {
   const expectedText = new Map([
     ['CNAME', 'groovemap.music\n'],
     [
@@ -128,9 +109,7 @@ async function validateStaticContract() {
       report(`${relativePath} does not match the approved static contract`);
   }
 
-  const manifest = JSON.parse(
-    await readFile(path.join(outputRoot, 'site.webmanifest'), 'utf8'),
-  );
+  const manifest = await readJson(path.join(outputRoot, 'site.webmanifest'));
   if (manifest.name !== 'GrooveMap' || manifest.start_url !== undefined) {
     report(
       'site.webmanifest must identify GrooveMap and remain root-relative without an unnecessary start_url',
@@ -143,18 +122,19 @@ async function validateStaticContract() {
     '/404.html',
     '/sitemap-index.xml',
   ]) {
-    try {
-      await assertReferenceExists(
-        outputRoot,
-        new URL(expectedPath, canonicalOrigin),
-      );
-    } catch {
+    if (
+      !(await pathExists(
+        outputPathForUrl(outputRoot, new URL(expectedPath, canonicalOrigin)),
+      ))
+    ) {
       report(`production build is missing ${expectedPath}`);
     }
   }
 }
 
 export async function validateSite() {
+  const errors = [];
+  const report = (message) => errors.push(message);
   const htmlValidate = new HtmlValidate({
     extends: ['html-validate:recommended'],
     rules: {
@@ -172,10 +152,10 @@ export async function validateSite() {
     report(`expected 3 generated HTML pages, found ${htmlFiles.length}`);
 
   await Promise.all(
-    htmlFiles.map((file) => validateHtmlFile(file, htmlValidate)),
+    htmlFiles.map((file) => validateHtmlFile(file, htmlValidate, report)),
   );
-  await validateStaticContract();
-  await validateBrandProvenance();
+  await validateStaticContract(report);
+  await validateBrandProvenance(report);
 
   if (errors.length > 0) {
     throw new Error(`Site validation failed:\n- ${errors.join('\n- ')}`);

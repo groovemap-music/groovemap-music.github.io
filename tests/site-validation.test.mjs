@@ -6,8 +6,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
+import { brandProvenanceErrors } from '../scripts/brand-validation.mjs';
 import {
-  brandProvenanceErrors,
   canonicalOrigin,
   deployedAssetPath,
   idsFromHtml,
@@ -16,6 +16,7 @@ import {
   referencesFromHtml,
 } from '../scripts/site-validation.mjs';
 import {
+  brandContractErrors,
   designRepository,
   designRevision,
   promotedAssets,
@@ -106,6 +107,72 @@ test('declares an unversioned non-publishable package with no release hooks', as
   assert.equal(manifest.devDependencies?.commitizen, undefined);
 });
 
+test('builds once before license validation in the local check DAG', async () => {
+  const justfile = await readFile(
+    path.join(repositoryRoot, 'Justfile'),
+    'utf8',
+  );
+  const checkRecipe = /^check:\s+(.+)$/mu.exec(justfile);
+  assert.ok(checkRecipe, 'Justfile must define the check recipe');
+
+  const dependencies = checkRecipe[1].trim().split(/\s+/u);
+  assert.equal(
+    dependencies.filter((dependency) => dependency === 'build').length,
+    1,
+  );
+  assert.ok(
+    dependencies.indexOf('build') < dependencies.indexOf('license-check'),
+    'check must build dist before validating distributed licenses',
+  );
+
+  const installRecipe = /^install-check:\s+(.+)$/mu.exec(justfile);
+  assert.ok(installRecipe, 'Justfile must define the install-check recipe');
+  assert.deepEqual(installRecipe[1].trim().split(/\s+/u), ['validate-site']);
+  assert.ok(!dependencies.includes('promote-brand'));
+});
+
+test('keeps public copy current and out of internal transition language', async () => {
+  const publicCopy = (
+    await Promise.all(
+      ['src/pages/index.astro', 'src/pages/about/index.astro'].map((file) =>
+        readFile(path.join(repositoryRoot, file), 'utf8'),
+      ),
+    )
+  ).join('\n');
+
+  for (const stalePhrase of [
+    'private-first',
+    'decomposing its original platform',
+    'come online',
+  ]) {
+    assert.doesNotMatch(publicCopy, new RegExp(stalePhrase, 'iu'));
+  }
+  assert.match(publicCopy, /public repositories/iu);
+  assert.match(publicCopy, /https:\/\/github\.com\/groovemap-music/u);
+});
+
+test('documents current Pages, DNS, and brand ownership', async () => {
+  const [readme, runbook, provenanceText] = await Promise.all([
+    readFile(path.join(repositoryRoot, 'README.md'), 'utf8'),
+    readFile(path.join(repositoryRoot, 'docs', 'pages-runbook.md'), 'utf8'),
+    readFile(
+      path.join(repositoryRoot, 'public', 'brand', 'provenance.json'),
+      'utf8',
+    ),
+  ]);
+  const provenance = JSON.parse(provenanceText);
+
+  assert.match(readme, /github\.com\/groovemap-music\/design/u);
+  assert.match(readme, /github\.com\/groovemap-music\/automation/u);
+  assert.match(runbook, /groovemap-music\/groovemap-music\.github\.io/u);
+  assert.match(runbook, /groovemap-music\/infra/u);
+  assert.match(runbook, /SimplicityGuy\/homelab/u);
+  assert.match(runbook, /dig \+short groovemap\.music A/u);
+  assert.match(runbook, /https:\/\/www\.groovemap\.music\//u);
+  assert.equal(provenance.canonicalRepository, designRepository);
+  assert.equal(provenance.canonicalRevision, designRevision);
+});
+
 const digest = (contents) =>
   createHash('sha256').update(contents).digest('hex');
 
@@ -169,6 +236,33 @@ test('maps every promoted brand file onto its deployed copy', () => {
   assert.equal(
     deployedAssetPath('/tmp/dist', 'public/site.webmanifest'),
     '/tmp/dist/site.webmanifest',
+  );
+});
+
+test('validates brand contract state without filesystem access', () => {
+  const [asset] = promotedAssets;
+  assert.deepEqual(
+    brandContractErrors({
+      assetDigests: [
+        {
+          asset,
+          deployedDigest: asset.sha256,
+          deployedPath: 'dist/brand/favicon.svg',
+          sourceDigest: asset.sha256,
+        },
+      ],
+      designRepository,
+      designRevision,
+      deployedProvenancePath: 'dist/brand/provenance.json',
+      promotedAssets: [asset],
+      provenance: {
+        assets: [asset],
+        canonicalRepository: designRepository,
+        canonicalRevision: designRevision,
+      },
+      provenanceMatchesDeployment: true,
+    }),
+    [],
   );
 });
 
