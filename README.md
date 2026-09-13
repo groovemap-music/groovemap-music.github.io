@@ -45,9 +45,10 @@ just preview
 ```
 
 `just check` runs formatting, Astro-aware lint and type checks, unit and automation
-contract tests, a production build, generated HTML/accessibility/link/asset/metadata
-validation, locked-dependency license policy, and repository/history secret scans.
-`just audit` is separate because it intentionally contacts an advisory service.
+contract tests, one production build, generated HTML/accessibility/link/asset/metadata validation,
+locked-dependency license policy, and repository/history secret scans. `just install-check`
+validates an existing build without rebuilding it. `just audit` is separate because it
+intentionally contacts an advisory service.
 
 The generated site is written to ignored `dist/`. Local preview is a static-file check;
 it does not emulate GitHub Pages configuration or DNS.

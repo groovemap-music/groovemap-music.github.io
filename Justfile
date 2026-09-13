@@ -8,12 +8,13 @@ default:
 setup:
     {{npm}} ci
 
-# Deterministic, credential-free pre-merge gate.
-check: ci-check license-check security
+# Deterministic, credential-free pre-merge gate. Audit remains separate because
+# it intentionally contacts the npm advisory service.
+check: ci-check build license-check secret-scan install-check
 
-# Source and application checks used by the shared CI workflow before its dedicated
-# coverage, audit, license, secret-scan, package, and smoke-test steps.
-ci-check: format-check lint typecheck test build validate-site automation-check
+# Source and application checks used by the shared CI workflow before its
+# dedicated coverage, policy, package, and built-artifact steps.
+ci-check: format-check lint typecheck test automation-check
 
 format-check:
     {{npm}} run format:check
@@ -44,7 +45,7 @@ automation-check:
 license-check:
     {{npm}} run licenses:check
 
-security:
+secret-scan:
     gitleaks git --redact --no-banner
     gitleaks dir . --redact --no-banner
 
@@ -52,9 +53,9 @@ security:
 audit:
     {{npm}} audit --audit-level=high
 
-# Rebuild and smoke-test the static deployment artifact. The site has no installable
-# package, so validating the built output is its installation contract.
-install-check: build validate-site
+# The site has no installable package. Validate the artifact produced by the
+# preceding build/package capability without rebuilding it.
+install-check: validate-site
 
 promote-brand:
     {{npm}} exec -- node scripts/promote-brand.mjs

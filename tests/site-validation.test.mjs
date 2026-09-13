@@ -107,6 +107,30 @@ test('declares an unversioned non-publishable package with no release hooks', as
   assert.equal(manifest.devDependencies?.commitizen, undefined);
 });
 
+test('builds once before license validation in the local check DAG', async () => {
+  const justfile = await readFile(
+    path.join(repositoryRoot, 'Justfile'),
+    'utf8',
+  );
+  const checkRecipe = /^check:\s+(.+)$/mu.exec(justfile);
+  assert.ok(checkRecipe, 'Justfile must define the check recipe');
+
+  const dependencies = checkRecipe[1].trim().split(/\s+/u);
+  assert.equal(
+    dependencies.filter((dependency) => dependency === 'build').length,
+    1,
+  );
+  assert.ok(
+    dependencies.indexOf('build') < dependencies.indexOf('license-check'),
+    'check must build dist before validating distributed licenses',
+  );
+
+  const installRecipe = /^install-check:\s+(.+)$/mu.exec(justfile);
+  assert.ok(installRecipe, 'Justfile must define the install-check recipe');
+  assert.deepEqual(installRecipe[1].trim().split(/\s+/u), ['validate-site']);
+  assert.ok(!dependencies.includes('promote-brand'));
+});
+
 const digest = (contents) =>
   createHash('sha256').update(contents).digest('hex');
 

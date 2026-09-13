@@ -14,7 +14,7 @@ const requiredInputs = [
   'coverage-command: just coverage',
   'audit-command: just audit',
   'license-command: just license-check',
-  'secret-scan-command: just security',
+  'secret-scan-command: just secret-scan',
   'package-command: just build',
   'install-command: just install-check',
   'coverage-files: coverage/lcov.info',
