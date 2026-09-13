@@ -55,9 +55,10 @@ it does not emulate GitHub Pages configuration or DNS.
 
 ## Deployment
 
-The official Astro/Pages workflow is active at `.github/workflows/pages.yml` and deploys
-validated `main` builds through GitHub Actions. CI and the Pages validation gate both pin
-the public `groovemap-music/automation` reusable workflow by a full reviewed commit.
+The official [Astro/Pages workflow](.github/workflows/pages.yml) deploys validated `main`
+builds through GitHub Actions. CI and the Pages validation gate both pin the public
+[`groovemap-music/automation`](https://github.com/groovemap-music/automation) reusable workflow
+by a full reviewed commit.
 Ordinary and Dependabot-authored pull requests use the same required CI job graph with no
 actor-specific skips. Pages uses only fully pinned Actions, the `github-pages`
 environment, deployment concurrency, and job-scoped minimum permissions (`contents:
@@ -74,8 +75,8 @@ This website is an unversioned deployment unit. It does not publish a package or
 meaningful versioned artifact, so Commitizen bump and release recipes are intentionally
 absent. A Pages deployment is not a product release.
 
-The first-party source is licensed under the [MIT License](LICENSE). Promoted brand SVGs
-use system font names and embed no font
-software; the source monorepo's unnotified Space Grotesk binaries were not promoted.
+The first-party source is licensed under the [MIT License](LICENSE). Promoted brand SVGs use
+system font names and embed no font software; their bytes and source provenance are verified
+against the pinned public design revision during `just check`.
 
 See the [documentation index](docs/README.md) for the GitHub Pages runbook.
