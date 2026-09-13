@@ -131,6 +131,48 @@ test('builds once before license validation in the local check DAG', async () =>
   assert.ok(!dependencies.includes('promote-brand'));
 });
 
+test('keeps public copy current and out of internal transition language', async () => {
+  const publicCopy = (
+    await Promise.all(
+      ['src/pages/index.astro', 'src/pages/about/index.astro'].map((file) =>
+        readFile(path.join(repositoryRoot, file), 'utf8'),
+      ),
+    )
+  ).join('\n');
+
+  for (const stalePhrase of [
+    'private-first',
+    'decomposing its original platform',
+    'come online',
+  ]) {
+    assert.doesNotMatch(publicCopy, new RegExp(stalePhrase, 'iu'));
+  }
+  assert.match(publicCopy, /public repositories/iu);
+  assert.match(publicCopy, /https:\/\/github\.com\/groovemap-music/u);
+});
+
+test('documents current Pages, DNS, and brand ownership', async () => {
+  const [readme, runbook, provenanceText] = await Promise.all([
+    readFile(path.join(repositoryRoot, 'README.md'), 'utf8'),
+    readFile(path.join(repositoryRoot, 'docs', 'pages-runbook.md'), 'utf8'),
+    readFile(
+      path.join(repositoryRoot, 'public', 'brand', 'provenance.json'),
+      'utf8',
+    ),
+  ]);
+  const provenance = JSON.parse(provenanceText);
+
+  assert.match(readme, /github\.com\/groovemap-music\/design/u);
+  assert.match(readme, /github\.com\/groovemap-music\/automation/u);
+  assert.match(runbook, /groovemap-music\/groovemap-music\.github\.io/u);
+  assert.match(runbook, /groovemap-music\/infra/u);
+  assert.match(runbook, /SimplicityGuy\/homelab/u);
+  assert.match(runbook, /dig \+short groovemap\.music A/u);
+  assert.match(runbook, /https:\/\/www\.groovemap\.music\//u);
+  assert.equal(provenance.canonicalRepository, designRepository);
+  assert.equal(provenance.canonicalRevision, designRevision);
+});
+
 const digest = (contents) =>
   createHash('sha256').update(contents).digest('hex');
 
