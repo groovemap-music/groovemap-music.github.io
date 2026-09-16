@@ -45,7 +45,9 @@ const currentPath = Astro.url.pathname;
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main-content">
+      Skip to main content
+    </a>
     <header class="site-header">
       <nav class="nav shell" aria-label="Primary navigation">
         <a class="brand-link" href="/" aria-label="GrooveMap home">
@@ -54,18 +56,21 @@ const currentPath = Astro.url.pathname;
         </a>
         <ul>
           <li>
-            <a href="/" aria-current={currentPath === '/' ? 'page' : undefined}
-              >Home</a
-            >
+            <a href="/" aria-current={currentPath === '/' ? 'page' : undefined}>
+              Home
+            </a>
           </li>
           <li>
             <a
               href="/about/"
               aria-current={currentPath === '/about/' ? 'page' : undefined}
-              >About</a
             >
+              About
+            </a>
           </li>
-          <li><a href="https://github.com/groovemap-music">GitHub</a></li>
+          <li>
+            <a href="https://github.com/groovemap-music">GitHub</a>
+          </li>
         </ul>
       </nav>
     </header>
@@ -75,7 +80,9 @@ const currentPath = Astro.url.pathname;
     <footer class="site-footer">
       <div class="shell footer-layout">
         <p>
-          <strong>GrooveMap</strong><br />Explore the connections behind music.
+          <strong>GrooveMap</strong>
+          <br />
+          Explore the connections behind music.
         </p>
         <p>
           <a href="https://github.com/groovemap-music">Source on GitHub</a>
