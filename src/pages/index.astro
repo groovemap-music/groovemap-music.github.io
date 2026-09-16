@@ -36,10 +36,12 @@ const pillars = [
         format the catalogs carry all fit the same map.
       </p>
       <div class="actions">
-        <a class="button primary" href="#how-it-works">See how it works</a>
-        <a class="button secondary" href="https://github.com/groovemap-music"
-          >Follow the build on GitHub</a
-        >
+        <a class="button primary" href="#how-it-works">
+          See how it works
+        </a>
+        <a class="button secondary" href="https://github.com/groovemap-music">
+          Follow the build on GitHub
+        </a>
       </div>
     </div>
     <div class="hero-art" aria-hidden="true">
@@ -60,11 +62,13 @@ const pillars = [
 
   <section class="signal" aria-label="GrooveMap data sources">
     <div class="shell signal-line">
-      <span>Discogs</span><span aria-hidden="true">↗</span><span
-        >MusicBrainz</span
-      ><span aria-hidden="true">↗</span><span>Knowledge graph</span><span
-        aria-hidden="true">↗</span
-      ><span>Discovery</span>
+      <span>Discogs</span>
+      <span aria-hidden="true">↗</span>
+      <span>MusicBrainz</span>
+      <span aria-hidden="true">↗</span>
+      <span>Knowledge graph</span>
+      <span aria-hidden="true">↗</span>
+      <span>Discovery</span>
     </div>
   </section>
 
@@ -80,17 +84,15 @@ const pillars = [
       </h2>
     </div>
     <div class="card-grid">
-      {
-        pillars.map((pillar) => (
-          <article class="feature-card">
-            <p class="card-number" aria-hidden="true">
-              {pillar.number}
-            </p>
-            <h3>{pillar.title}</h3>
-            <p>{pillar.copy}</p>
-          </article>
-        ))
-      }
+      {pillars.map((pillar) => (
+        <article class="feature-card">
+          <p class="card-number" aria-hidden="true">
+            {pillar.number}
+          </p>
+          <h3>{pillar.title}</h3>
+          <p>{pillar.copy}</p>
+        </article>
+      ))}
     </div>
   </section>
 
@@ -111,9 +113,9 @@ const pillars = [
         validation, and licensing so each part of the system can be understood
         and improved independently.
       </p>
-      <a class="text-link" href="/about/"
-        >Read about the project <span aria-hidden="true">→</span></a
-      >
+      <a class="text-link" href="/about/">
+        Read about the project <span aria-hidden="true">→</span>
+      </a>
     </div>
   </section>
 
@@ -124,8 +126,8 @@ const pillars = [
       Browse the explorer, data pipelines, shared contracts, design system, and
       operating tools in the GrooveMap organization.
     </p>
-    <a class="button primary" href="https://github.com/groovemap-music"
-      >Visit groovemap-music on GitHub</a
-    >
+    <a class="button primary" href="https://github.com/groovemap-music">
+      Visit groovemap-music on GitHub
+    </a>
   </section>
 </BaseLayout>
