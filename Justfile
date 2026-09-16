@@ -42,7 +42,7 @@ automation-check:
     actionlint .github/workflows/*.yml
     {{npm}} exec -- node scripts/check-automation.mjs
 
-license-check:
+license-check: build
     {{npm}} run licenses:check
 
 secret-scan:
