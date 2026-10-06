@@ -10,10 +10,10 @@ updates:
     groups:
       actions-security:
         applies-to: security-updates
-        patterns: ["*"]
+        patterns: ['*']
       actions-version:
         applies-to: version-updates
-        patterns: ["*"]
+        patterns: ['*']
   - package-ecosystem: npm
     directory: /
     schedule:
@@ -24,10 +24,10 @@ updates:
     groups:
       npm-security:
         applies-to: security-updates
-        patterns: ["*"]
+        patterns: ['*']
       npm-version:
         applies-to: version-updates
-        patterns: ["*"]
+        patterns: ['*']
     ignore:
       - dependency-name: typescript
         versions: ['7.x']
