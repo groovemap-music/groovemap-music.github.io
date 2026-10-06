@@ -8,11 +8,12 @@ updates:
     labels: [dependencies, github-actions]
     open-pull-requests-limit: 5
     groups:
-      github-actions:
-        patterns: ['*']
-      github-actions-security:
+      actions-security:
         applies-to: security-updates
-        patterns: ['*']
+        patterns: ["*"]
+      actions-version:
+        applies-to: version-updates
+        patterns: ["*"]
   - package-ecosystem: npm
     directory: /
     schedule:
@@ -21,11 +22,12 @@ updates:
     labels: [dependencies, javascript]
     open-pull-requests-limit: 10
     groups:
-      javascript:
-        patterns: ['*']
-      javascript-security:
+      npm-security:
         applies-to: security-updates
-        patterns: ['*']
+        patterns: ["*"]
+      npm-version:
+        applies-to: version-updates
+        patterns: ["*"]
     ignore:
       - dependency-name: typescript
         versions: ['7.x']
