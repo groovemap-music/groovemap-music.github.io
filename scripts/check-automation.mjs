@@ -5,7 +5,7 @@ import path from 'node:path';
 import { repositoryRoot as root } from './filesystem.mjs';
 
 const workflows = path.join(root, '.github', 'workflows');
-const automationRevision = '2f34a4da5c552bc23c75edd3d8d81be0a4b3271c';
+const automationRevision = 'dbf22ed83d486e9484fc8c6385c7c3e5995700e4';
 const reusableCaller = `uses: groovemap-music/automation/.github/workflows/reusable-ci.yml@${automationRevision}`;
 const requiredInputs = [
   'language: node',
