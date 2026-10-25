@@ -2,37 +2,37 @@
   "assets": [
     {
       "destination": "public/brand/favicon.svg",
-      "sha256": "33fb91b68f74e5bca9ccd4e63e865dd1becfff95ac2d46053e41f5c92a38bca6",
+      "sha256": "f3d8bf527b210a08f1bc37f94b3cff638f7702313c57829dc4eeb59c166af7d0",
       "source": "brand/assets/favicon.svg"
     },
     {
       "destination": "public/brand/app-icon-192.svg",
-      "sha256": "48585bd9c04a3e2aabfecd57f3119a87fedf4b66e21dfb29aab20803fb704429",
+      "sha256": "8f3dead165a94360282342d0ec5ce3671f6cea8c0e49f9064d940178d7602603",
       "source": "brand/assets/app-icon-192.svg"
     },
     {
       "destination": "public/brand/app-icon-512.svg",
-      "sha256": "6250aed267b6ad0ebfa6200e688b7c424a999fc2a2a464448c451a5d4522b6cd",
+      "sha256": "1bb627718ba623a1ff0caf4db09a2b71d3e949d10a43d34ba7367a205edccf9a",
       "source": "brand/assets/app-icon-512.svg"
     },
     {
       "destination": "public/brand/og-image.svg",
-      "sha256": "e4bec1252275341ba7bf0a2da8f02f98f3c7bb0f2308947967e4996ef6bc01cf",
+      "sha256": "57e52bdf2e94a0e760c46cd3265fb9869572d19b1ae727f7d95aea42c67c3d31",
       "source": "brand/assets/og-image.svg"
     },
     {
       "destination": "public/brand/tokens.css",
-      "sha256": "94eeb3b70ecdb01abde8983e28bb9a30e8677aed3c2c7025efe0968812463455",
+      "sha256": "beb1fa2357e884cc702a0cf19176203de88f614f3ae10ce983699bea5353a92c",
       "source": "brand/assets/tokens.css"
     },
     {
       "destination": "public/site.webmanifest",
-      "sha256": "5ad2c96f0cfcc98417381342ce364ad581bb495ce0437110c50effcc531898f9",
+      "sha256": "bbb5a3a8484e898bc964bdcda33a5c174a678cd1029728405ec3445cf55bf4f1",
       "source": "brand/assets/site.webmanifest"
     }
   ],
   "canonicalRepository": "https://github.com/groovemap-music/design",
-  "canonicalRevision": "7abe13ad3e22e81b5437eb92acb8db998730e11a",
+  "canonicalRevision": "41be7cbe738f40df0c75ad7065475e91d6cc2aa4",
   "editableSources": [
     "brand/tokens.json",
     "brand/templates/"
