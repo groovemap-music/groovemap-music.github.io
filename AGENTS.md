@@ -9,7 +9,7 @@ must never depend on secrets at build or run time.
   `https://groovemap.music`; do not add a repository `base` path.
 - Treat `groovemap-music/design` as the editable source for files under `public/brand`.
   Set `GROOVEMAP_DESIGN_REPO` to a clean local checkout at
-  `59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d` and use `just promote-brand`; do not
+  `7abe13ad3e22e81b5437eb92acb8db998730e11a` and use `just promote-brand`; do not
   edit promoted outputs independently.
 - Keep internal links root-relative and accessible without client-side JavaScript.
 - Keep the Pages workflow on the official Astro/GitHub Actions deployment path with

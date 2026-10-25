@@ -17,7 +17,7 @@ under `public/brand` are byte-identical deterministic render outputs promoted fr
 full design commit recorded in [`public/brand/provenance.json`](public/brand/provenance.json).
 That file also records each source path and SHA-256 digest. Set
 `GROOVEMAP_DESIGN_REPO` to a clean checkout at
-`59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d` before running `just promote-brand`; the
+`7abe13ad3e22e81b5437eb92acb8db998730e11a` before running `just promote-brand`; the
 promotion command refuses any other revision. Use of the GrooveMap name and logos is
 governed separately by the design repository's
 [trademark-use policy](https://github.com/groovemap-music/design/blob/main/TRADEMARKS.md).
