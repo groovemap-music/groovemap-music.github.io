@@ -1,6 +1,22 @@
 {
   "exceptions": [
     {
+      "license": "OFL-1.1",
+      "name": "@fontsource/jura",
+      "obligations": {
+        "distributedInSite": true,
+        "licenseUrl": "https://openfontlicense.org/open-font-license-official-text/",
+        "notice": "THIRD_PARTY_NOTICES.md",
+        "sourceUrl": "https://github.com/fontsource/font-files/tree/main/fonts/google/jura",
+        "verification": "The Jura woff2/woff files are bundled into dist/_astro and the unmodified license text ships at public/licenses/jura-OFL-1.1.txt. Reassess if the font is modified or renamed (OFL reserved-name and no-sale-alone terms)."
+      },
+      "owner": "@SimplicityGuy",
+      "rationale": "Jura is the brand typeface for the lowercase groovemap wordmark and headings, self-hosted from the pinned @fontsource/jura package. OFL-1.1 permits bundling and redistribution of the unmodified font with the copyright notice and license; it is a font license, not a code license, and is allowed only for this package and version.",
+      "reviewBy": "2027-08-27",
+      "role": "Self-hosted brand typeface (Jura 300/400/500, latin subset) shipped in the Pages artifact.",
+      "version": "5.3.0"
+    },
+    {
       "license": "LGPL-3.0-or-later",
       "name": "@img/sharp-libvips-darwin-arm64",
       "obligations": {

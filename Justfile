@@ -60,6 +60,11 @@ install-check: validate-site
 promote-brand:
     {{npm}} exec -- node scripts/promote-brand.mjs
 
+# Regenerate the PNG social/touch previews from the promoted SVGs. Run after
+# promote-brand; the manifest records source digests and tool versions.
+render-previews:
+    {{npm}} exec -- node scripts/render-previews.mjs
+
 dev:
     {{npm}} run dev
 
