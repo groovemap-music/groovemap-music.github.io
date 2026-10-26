@@ -10,7 +10,9 @@ interface Props {
 const { title, description, path } = Astro.props;
 const site = Astro.site ?? new URL('https://groovemap.music');
 const canonical = new URL(path, site);
-const socialImage = new URL('/brand/og-image.svg', site);
+const socialImage = new URL('/brand/og-image.png', site);
+const touchIcon = new URL('/brand/apple-touch-icon.png', site);
+const tagline = 'explore the connections behind music';
 const currentPath = Astro.url.pathname;
 ---
 
@@ -20,10 +22,72 @@ const currentPath = Astro.url.pathname;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#0e0d0b" />
+    <meta
+      name="theme-color"
+      content="#0e0d0b"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#eeeae3"
+      media="(prefers-color-scheme: light)"
+    />
+    <script is:inline>
+      // Runs before first paint so the chosen theme never flashes. No stored
+      // choice means "follow the OS", including live OS changes.
+      (() => {
+        const key = 'groovemap-theme';
+        const root = document.documentElement;
+        const media = matchMedia('(prefers-color-scheme: light)');
+        const colors = { dark: '#0e0d0b', light: '#eeeae3' };
+        const stored = () => {
+          try {
+            const value = localStorage.getItem(key);
+            return value === 'light' || value === 'dark' ? value : null;
+          } catch {
+            return null;
+          }
+        };
+        const apply = () => {
+          const theme = stored() ?? (media.matches ? 'light' : 'dark');
+          root.dataset.theme = theme;
+          for (const meta of document.querySelectorAll(
+            'meta[name="theme-color"]',
+          )) {
+            meta.removeAttribute('media');
+            meta.setAttribute('content', colors[theme]);
+          }
+          const other = theme === 'dark' ? 'light' : 'dark';
+          for (const button of document.querySelectorAll(
+            '[data-theme-toggle]',
+          )) {
+            button.hidden = false;
+            button.setAttribute('aria-label', `Switch to ${other} theme`);
+            button.setAttribute('aria-pressed', String(theme === 'light'));
+          }
+        };
+        apply();
+        media.addEventListener('change', apply);
+        addEventListener('storage', apply);
+        document.addEventListener('DOMContentLoaded', apply);
+        document.addEventListener('click', (event) => {
+          if (!(event.target instanceof Element)) return;
+          if (!event.target.closest('[data-theme-toggle]')) return;
+          const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          try {
+            localStorage.setItem(key, next);
+          } catch {
+            // Storage can be blocked; the choice still applies for this page.
+          }
+          root.dataset.theme = next;
+          apply();
+        });
+      })();
+    </script>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={touchIcon} />
     <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="GrooveMap" />
@@ -31,7 +95,7 @@ const currentPath = Astro.url.pathname;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
-    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -42,6 +106,10 @@ const currentPath = Astro.url.pathname;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
+    <meta
+      name="twitter:image:alt"
+      content="GrooveMap — explore the connections behind music"
+    />
     <title>{title}</title>
   </head>
   <body>
@@ -51,8 +119,24 @@ const currentPath = Astro.url.pathname;
     <header class="site-header">
       <nav class="nav shell" aria-label="Primary navigation">
         <a class="brand-link" href="/" aria-label="GrooveMap home">
-          <img src="/brand/favicon.svg" alt="" width="40" height="40" />
-          <span>GrooveMap</span>
+          <img
+            class="mark mark-dark"
+            src="/brand/icon-dark.svg"
+            alt=""
+            width="40"
+            height="40"
+          />
+          <img
+            class="mark mark-light"
+            src="/brand/icon-light.svg"
+            alt=""
+            width="40"
+            height="40"
+          />
+          <span class="brand-text">
+            <span class="wordmark">groovemap</span>
+            <span class="tagline">{tagline}</span>
+          </span>
         </a>
         <ul>
           <li>
@@ -72,6 +156,43 @@ const currentPath = Astro.url.pathname;
             <a href="https://github.com/groovemap-music">GitHub</a>
           </li>
         </ul>
+        <button
+          class="theme-toggle"
+          type="button"
+          data-theme-toggle
+          aria-label="Switch theme"
+          aria-pressed="false"
+          hidden
+        >
+          <svg
+            class="icon-sun"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"></path>
+          </svg>
+          <svg
+            class="icon-moon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"></path>
+          </svg>
+        </button>
       </nav>
     </header>
     <main id="main-content">
@@ -80,9 +201,9 @@ const currentPath = Astro.url.pathname;
     <footer class="site-footer">
       <div class="shell footer-layout">
         <p>
-          <strong>GrooveMap</strong>
+          <strong class="wordmark">groovemap</strong>
           <br />
-          Explore the connections behind music.
+          <span class="tagline">{tagline}</span>
         </p>
         <p>
           <a href="https://github.com/groovemap-music">Source on GitHub</a>

@@ -75,8 +75,15 @@ This website is an unversioned deployment unit. It does not publish a package or
 meaningful versioned artifact, so Commitizen bump and release recipes are intentionally
 absent. A Pages deployment is not a product release.
 
-The first-party source is licensed under the [MIT License](LICENSE). Promoted brand SVGs use
-system font names and embed no font software; their bytes and source provenance are verified
-against the pinned public design revision during `just check`.
+The first-party source is licensed under the [MIT License](LICENSE). Promoted brand SVGs are text-free (the wordmark is outlined) and embed no font software;
+their bytes and source provenance are verified against the pinned public design revision
+during `just check`. The site UI sets the lowercase `groovemap` wordmark in Jura (SIL OFL
+1.1), self-hosted from the pinned `@fontsource/jura` package; the font license is recorded in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+`public/brand/og-image.png` and `public/brand/apple-touch-icon.png` are derived from the
+promoted SVGs by `just render-previews` (pinned `sharp`), because several social platforms do
+not render SVG images. `public/brand/previews.json` records each source digest and the tool
+versions; `just check` fails if a source SVG changes without regenerating the previews.
 
 See the [documentation index](docs/README.md) for the GitHub Pages runbook.

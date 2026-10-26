@@ -345,3 +345,25 @@ test('rejects provenance that unpins the design repository or commit', async (t)
     'brand provenance asset contract does not match the reviewed design outputs',
   ]);
 });
+
+test('PNG previews match the promoted SVG sources and declared sizes', async () => {
+  const manifest = JSON.parse(
+    await readFile(
+      path.join(repositoryRoot, 'public/brand/previews.json'),
+      'utf8',
+    ),
+  );
+  assert.equal(manifest.previews.length, 2);
+  for (const preview of manifest.previews) {
+    const source = await readFile(path.join(repositoryRoot, preview.source));
+    assert.equal(
+      createHash('sha256').update(source).digest('hex'),
+      preview.sourceSha256,
+      `${preview.destination} must be regenerated with just render-previews`,
+    );
+    const png = await readFile(path.join(repositoryRoot, preview.destination));
+    assert.equal(png.subarray(1, 4).toString(), 'PNG');
+    assert.equal(png.readUInt32BE(16), preview.width);
+    assert.equal(png.readUInt32BE(20), preview.height);
+  }
+});
