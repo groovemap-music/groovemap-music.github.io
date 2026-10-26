@@ -64,8 +64,13 @@ async function validateHtmlFile(htmlPath, htmlValidate, report) {
     /<link rel="canonical" href="https:\/\/groovemap\.music\/[^"]*">/u,
     /<meta property="og:title" content="[^"]+">/u,
     /<meta property="og:description" content="[^"]+">/u,
-    /<meta property="og:image" content="https:\/\/groovemap\.music\/brand\/og-image\.svg">/u,
+    /<meta property="og:image" content="https:\/\/groovemap\.music\/brand\/og-image\.png">/u,
     /<link rel="manifest" href="\/site\.webmanifest">/u,
+    /<meta name="twitter:image" content="https:\/\/groovemap\.music\/brand\/og-image\.png">/u,
+    /<meta name="twitter:image:alt" content="[^"]+">/u,
+    /<link rel="apple-touch-icon" href="https:\/\/groovemap\.music\/brand\/apple-touch-icon\.png">/u,
+    /<meta name="theme-color" content="#0e0d0b" media="\(prefers-color-scheme: dark\)">/u,
+    /<meta name="theme-color" content="#eeeae3" media="\(prefers-color-scheme: light\)">/u,
   ];
   for (const requirement of requiredMetadata) {
     if (!requirement.test(html)) {

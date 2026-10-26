@@ -1,0 +1,23 @@
+{
+  "generatedBy": "scripts/render-previews.mjs",
+  "previews": [
+    {
+      "destination": "public/brand/og-image.png",
+      "height": 630,
+      "source": "public/brand/og-image.svg",
+      "sourceSha256": "57e52bdf2e94a0e760c46cd3265fb9869572d19b1ae727f7d95aea42c67c3d31",
+      "width": 1200
+    },
+    {
+      "destination": "public/brand/apple-touch-icon.png",
+      "height": 180,
+      "source": "public/brand/icon-dark.svg",
+      "sourceSha256": "fcd12a4254be11fa0968a08b364baad06b2473c62f839d9416254bf793383b72",
+      "width": 180
+    }
+  ],
+  "tool": {
+    "libvips": "8.18.7",
+    "sharp": "0.35.5"
+  }
+}

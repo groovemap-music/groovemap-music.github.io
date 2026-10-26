@@ -58,6 +58,16 @@ export const promotedAssets = [
     source: 'brand/assets/favicon.svg',
   },
   {
+    destination: 'public/brand/icon-dark.svg',
+    sha256: 'fcd12a4254be11fa0968a08b364baad06b2473c62f839d9416254bf793383b72',
+    source: 'brand/assets/icon-dark.svg',
+  },
+  {
+    destination: 'public/brand/icon-light.svg',
+    sha256: '6ff4bfda3163e5e0c66b4b339715eb661b70fe718dfff406ec76d8a582780de6',
+    source: 'brand/assets/icon-light.svg',
+  },
+  {
     destination: 'public/brand/app-icon-192.svg',
     sha256: '8f3dead165a94360282342d0ec5ce3671f6cea8c0e49f9064d940178d7602603',
     source: 'brand/assets/app-icon-192.svg',
