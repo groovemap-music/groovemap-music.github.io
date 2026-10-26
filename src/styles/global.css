@@ -1,9 +1,16 @@
 @import url('/brand/tokens.css');
+@import '@fontsource/jura/latin-300.css';
+@import '@fontsource/jura/latin-400.css';
+@import '@fontsource/jura/latin-500.css';
 
+/*
+ * Theme: the inline script in BaseLayout sets data-theme before first paint. Without
+ * JavaScript the OS preference decides, because color-scheme is "light dark" and every
+ * themed value below is a light-dark() pair.
+ */
 :root {
-  color-scheme: dark;
+  color-scheme: light dark;
   font-family:
-    Inter,
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -11,9 +18,60 @@
     'Segoe UI',
     sans-serif;
   font-synthesis: none;
+  accent-color: var(--accent);
+  --font-display: 'Jura', ui-sans-serif, system-ui, sans-serif;
   --shell: min(1120px, calc(100vw - 2.5rem));
-  --muted: var(--groovemap-muted-text);
-  --panel: rgba(20, 19, 16, 0.78);
+
+  /* Warm UI scale, shared with the Graph Explorer. Brand tokens supply the accents. */
+  --bg-void: light-dark(#eeeae3, #0a0908);
+  --bg-deep: light-dark(#f7f4ee, #0e0d0b);
+  --card: light-dark(#fbf9f5, #12110e);
+  --inner: light-dark(#f3efe8, #141310);
+  --border: light-dark(#ddd5c7, #2e2a24);
+  --hover: light-dark(#ebe5db, #24211c);
+  --text-high: light-dark(#1a1714, #f2ede4);
+  --text-mid: light-dark(#4a4339, #cfc6b8);
+  --text-dim: light-dark(#5d564b, #a89f91);
+  --accent: light-dark(var(--groovemap-oxblood), var(--groovemap-brass));
+  --accent-alt: light-dark(var(--groovemap-brass), var(--groovemap-oxblood));
+  --on-accent: light-dark(#ffffff, var(--groovemap-void));
+  --shadow: light-dark(#1a1714, #000000);
+  --muted: var(--text-dim);
+  --panel: color-mix(in srgb, var(--inner) 78%, transparent);
+
+  /* Tints are theme-specific because the same wash reads far stronger on cream. */
+  --wash-accent-soft: color-mix(in srgb, var(--accent) 7%, transparent);
+  --wash-accent: light-dark(
+    color-mix(in srgb, var(--accent) 14%, transparent),
+    color-mix(in srgb, var(--accent) 24%, transparent)
+  );
+  --wash-alt-soft: light-dark(
+    color-mix(in srgb, var(--accent-alt) 12%, transparent),
+    color-mix(in srgb, var(--accent-alt) 22%, transparent)
+  );
+  --wash-alt: light-dark(
+    color-mix(in srgb, var(--accent-alt) 22%, transparent),
+    color-mix(in srgb, var(--accent-alt) 62%, transparent)
+  );
+  --wash-alt-hero: light-dark(
+    color-mix(in srgb, var(--accent-alt) 18%, transparent),
+    color-mix(in srgb, var(--accent-alt) 35%, transparent)
+  );
+  --line-faint: color-mix(in srgb, var(--border) 12%, transparent);
+  --line-soft: color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+::selection {
+  color: var(--on-accent);
+  background: var(--accent);
 }
 
 *,
@@ -29,15 +87,15 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  color: var(--groovemap-text);
+  color: var(--text-high);
   background:
-    radial-gradient(circle at 78% 8%, rgba(77, 0, 24, 0.35), transparent 27rem),
+    radial-gradient(circle at 78% 8%, var(--wash-alt-hero), transparent 27rem),
     radial-gradient(
       circle at 8% 38%,
-      rgba(184, 150, 42, 0.09),
+      var(--wash-accent-soft),
       transparent 24rem
     ),
-    var(--groovemap-void);
+    var(--bg-void);
   font-size: 1rem;
   line-height: 1.65;
 }
@@ -47,15 +105,15 @@ body::before {
   z-index: -1;
   inset: 0;
   background-image:
-    linear-gradient(rgba(46, 42, 36, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(46, 42, 36, 0.12) 1px, transparent 1px);
+    linear-gradient(var(--line-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-faint) 1px, transparent 1px);
   background-size: 64px 64px;
   content: '';
   mask-image: linear-gradient(to bottom, black, transparent 78%);
 }
 
 a {
-  color: var(--groovemap-brass);
+  color: var(--accent);
   text-underline-offset: 0.2em;
 }
 
@@ -65,7 +123,7 @@ a:hover {
 
 a:focus-visible,
 button:focus-visible {
-  outline: 3px solid var(--groovemap-brass);
+  outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
 
@@ -84,6 +142,8 @@ p {
 h1,
 h2,
 h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
   line-height: 1.08;
   text-wrap: balance;
 }
@@ -92,19 +152,19 @@ h1 {
   max-width: 13ch;
   margin-bottom: 1.6rem;
   font-size: clamp(3.25rem, 8vw, 6.7rem);
-  letter-spacing: -0.065em;
+  letter-spacing: 0.01em;
 }
 
 h2 {
   margin-bottom: 1.25rem;
   font-size: clamp(2.15rem, 5vw, 4rem);
-  letter-spacing: -0.048em;
+  letter-spacing: 0.01em;
 }
 
 h3 {
   margin-bottom: 0.8rem;
   font-size: 1.42rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
 }
 
 .shell {
@@ -118,8 +178,8 @@ h3 {
   top: 1rem;
   left: 1rem;
   padding: 0.75rem 1rem;
-  color: var(--groovemap-void);
-  background: var(--groovemap-brass);
+  color: var(--on-accent);
+  background: var(--accent);
   border-radius: 0.35rem;
   font-weight: 800;
   transform: translateY(-200%);
@@ -132,8 +192,8 @@ h3 {
 .site-header {
   position: relative;
   z-index: 5;
-  border-bottom: 1px solid rgba(46, 42, 36, 0.72);
-  background: rgba(14, 13, 11, 0.82);
+  border-bottom: 1px solid var(--line-soft);
+  background: color-mix(in srgb, var(--bg-deep) 82%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -142,22 +202,89 @@ h3 {
   min-height: 5.4rem;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.25rem;
 }
 
 .brand-link {
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  color: var(--groovemap-text);
-  font-size: 1.12rem;
-  font-weight: 780;
-  letter-spacing: -0.02em;
+  color: var(--text-high);
   text-decoration: none;
 }
 
-.brand-link img {
-  border-radius: 0.55rem;
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+}
+
+.tagline {
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+/* The mark is a full-bleed tile, so it is never clipped with a radius in the header. */
+.mark-light,
+:root[data-theme='light'] .mark-dark {
+  display: none;
+}
+
+:root[data-theme='light'] .mark-light {
+  display: block;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .mark-dark {
+    display: none;
+  }
+
+  :root:not([data-theme]) .mark-light {
+    display: block;
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-high);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.theme-toggle[hidden] {
+  display: none;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+.theme-toggle .icon-sun,
+:root[data-theme='light'] .theme-toggle .icon-moon {
+  display: none;
+}
+
+:root[data-theme='light'] .theme-toggle .icon-sun {
+  display: block;
 }
 
 .nav ul {
@@ -165,6 +292,7 @@ h3 {
   margin: 0;
   padding: 0;
   align-items: center;
+  margin-left: auto;
   gap: clamp(1rem, 3vw, 2rem);
   list-style: none;
 }
@@ -172,7 +300,7 @@ h3 {
 .nav ul a {
   position: relative;
   padding-block: 0.5rem;
-  color: var(--muted);
+  color: var(--text-dim);
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -182,7 +310,7 @@ h3 {
 
 .nav ul a:hover,
 .nav ul a[aria-current='page'] {
-  color: var(--groovemap-text);
+  color: var(--text-high);
 }
 
 .nav ul a[aria-current='page']::after {
@@ -191,7 +319,7 @@ h3 {
   bottom: -0.2rem;
   left: 0;
   height: 2px;
-  background: var(--groovemap-brass);
+  background: var(--accent);
   content: '';
 }
 
@@ -211,7 +339,7 @@ h3 {
 
 .eyebrow {
   margin-bottom: 1.15rem;
-  color: var(--groovemap-brass);
+  color: var(--accent);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -220,7 +348,7 @@ h3 {
 
 .lede {
   max-width: 64ch;
-  color: var(--groovemap-text);
+  color: var(--text-high);
   font-size: clamp(1.1rem, 2vw, 1.35rem);
 }
 
@@ -241,7 +369,7 @@ h3 {
   padding: 0.8rem 1.2rem;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--groovemap-border);
+  border: 1px solid var(--border);
   border-radius: 0.3rem;
   font-weight: 780;
   line-height: 1.2;
@@ -257,18 +385,18 @@ h3 {
 }
 
 .button.primary {
-  color: var(--groovemap-void);
-  border-color: var(--groovemap-brass);
-  background: var(--groovemap-brass);
+  color: var(--on-accent);
+  border-color: var(--accent);
+  background: var(--accent);
 }
 
 .button.secondary {
-  color: var(--groovemap-text);
-  background: rgba(20, 19, 16, 0.62);
+  color: var(--text-high);
+  background: color-mix(in srgb, var(--inner) 62%, transparent);
 }
 
 .button.secondary:hover {
-  border-color: var(--groovemap-brass);
+  border-color: var(--accent);
 }
 
 .hero-art {
@@ -284,8 +412,8 @@ h3 {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(184, 150, 42, 0.24),
-    rgba(77, 0, 24, 0.3) 46%,
+    var(--wash-accent),
+    var(--wash-alt-soft) 46%,
     transparent 72%
   );
   content: '';
@@ -295,27 +423,29 @@ h3 {
 .hero-art img {
   position: absolute;
   z-index: 1;
-  inset: 10%;
+  inset: 10% auto auto 10%;
   width: 80%;
-  border: 1px solid rgba(184, 150, 42, 0.2);
+  height: auto;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   border-radius: 18%;
   box-shadow:
-    0 2.5rem 7rem rgba(0, 0, 0, 0.52),
-    0 0 4rem rgba(184, 150, 42, 0.08);
+    0 2.5rem 7rem color-mix(in srgb, var(--shadow) 52%, transparent),
+    0 0 4rem color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .orbit {
   position: absolute;
   z-index: -1;
   inset: 2%;
-  border: 1px solid rgba(184, 150, 42, 0.22);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
   border-radius: 50%;
   transform: rotate(-13deg);
 }
 
 .orbit-two {
   inset: 18% -4%;
-  border-color: rgba(242, 237, 228, 0.24);
+  border-color: color-mix(in srgb, var(--text-high) 24%, transparent);
   transform: rotate(31deg);
 }
 
@@ -324,10 +454,10 @@ h3 {
   z-index: 2;
   width: 0.75rem;
   height: 0.75rem;
-  border: 2px solid var(--groovemap-void);
+  border: 2px solid var(--bg-void);
   border-radius: 50%;
-  background: var(--groovemap-brass);
-  box-shadow: 0 0 1.2rem var(--groovemap-brass);
+  background: var(--accent);
+  box-shadow: 0 0 1.2rem var(--accent);
 }
 
 .node-one {
@@ -338,8 +468,8 @@ h3 {
 .node-two {
   right: -1%;
   bottom: 31%;
-  background: var(--groovemap-text);
-  box-shadow: 0 0 1.2rem var(--groovemap-text);
+  background: var(--text-high);
+  box-shadow: 0 0 1.2rem var(--text-high);
 }
 
 .node-three {
@@ -349,8 +479,8 @@ h3 {
 
 .signal {
   overflow: hidden;
-  border-block: 1px solid rgba(46, 42, 36, 0.82);
-  background: rgba(20, 19, 16, 0.66);
+  border-block: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: color-mix(in srgb, var(--inner) 66%, transparent);
 }
 
 .signal-line {
@@ -367,7 +497,7 @@ h3 {
 }
 
 .signal-line span[aria-hidden='true'] {
-  color: var(--groovemap-brass);
+  color: var(--accent);
   font-size: 1.2rem;
 }
 
@@ -389,16 +519,15 @@ h3 {
 .feature-card {
   min-height: 20rem;
   padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--groovemap-border);
+  border: 1px solid var(--border);
   background:
-    linear-gradient(145deg, rgba(184, 150, 42, 0.07), transparent 42%),
+    linear-gradient(145deg, var(--wash-accent-soft), transparent 42%),
     var(--panel);
 }
 
 .feature-card:nth-child(2) {
   background:
-    linear-gradient(145deg, rgba(77, 0, 24, 0.22), transparent 46%),
-    var(--panel);
+    linear-gradient(145deg, var(--wash-alt-soft), transparent 46%), var(--panel);
 }
 
 .feature-card p:last-child {
@@ -407,15 +536,16 @@ h3 {
 
 .card-number {
   margin-bottom: 6rem;
-  color: var(--groovemap-brass);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.76rem;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 500;
   letter-spacing: 0.12em;
 }
 
 .split {
   display: grid;
-  border-top: 1px solid rgba(46, 42, 36, 0.68);
+  border-top: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
   gap: clamp(3rem, 10vw, 9rem);
 }
@@ -438,14 +568,14 @@ h3 {
 .cta {
   margin-bottom: clamp(5rem, 10vw, 9rem);
   padding: clamp(2rem, 6vw, 5rem);
-  border: 1px solid rgba(184, 150, 42, 0.36);
+  border: 1px solid color-mix(in srgb, var(--accent) 36%, transparent);
   background:
-    radial-gradient(
-      circle at 85% 20%,
-      rgba(77, 0, 24, 0.62),
-      transparent 30rem
-    ),
-    linear-gradient(135deg, rgba(184, 150, 42, 0.12), rgba(20, 19, 16, 0.84));
+    radial-gradient(circle at 85% 20%, var(--wash-alt), transparent 30rem),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      color-mix(in srgb, var(--inner) 84%, transparent)
+    );
 }
 
 .cta h2 {
@@ -476,13 +606,13 @@ h3 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
-  background: var(--groovemap-border);
-  border: 1px solid var(--groovemap-border);
+  background: var(--border);
+  border: 1px solid var(--border);
 }
 
 .article-grid section {
   padding: clamp(1.75rem, 4vw, 3.5rem);
-  background: var(--groovemap-deep);
+  background: var(--bg-deep);
 }
 
 .article-grid section:last-child {
@@ -504,14 +634,14 @@ h3 {
 }
 
 .principles strong {
-  color: var(--groovemap-text);
+  color: var(--text-high);
 }
 
 .callout {
   display: grid;
   margin-top: clamp(4rem, 8vw, 7rem);
   padding-block: 2.5rem;
-  border-block: 1px solid var(--groovemap-border);
+  border-block: 1px solid var(--border);
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
   gap: clamp(2rem, 8vw, 7rem);
 }
@@ -533,11 +663,12 @@ h3 {
 .error-code {
   margin: 0;
   color: transparent;
-  font-size: clamp(8rem, 28vw, 22rem);
-  font-weight: 900;
-  letter-spacing: -0.1em;
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 19vw, 15rem);
+  font-weight: 500;
+  letter-spacing: 0;
   line-height: 0.8;
-  -webkit-text-stroke: 1px var(--groovemap-border);
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--text-dim) 45%, transparent);
 }
 
 .not-found h1 {
@@ -546,8 +677,8 @@ h3 {
 }
 
 .site-footer {
-  border-top: 1px solid var(--groovemap-border);
-  background: var(--groovemap-deep);
+  border-top: 1px solid var(--border);
+  background: var(--bg-deep);
 }
 
 .footer-layout {
@@ -565,7 +696,9 @@ h3 {
 }
 
 .footer-layout strong {
-  color: var(--groovemap-text);
+  color: var(--text-high);
+  font-size: 1.35rem;
+  font-weight: 300;
 }
 
 @media (max-width: 780px) {
@@ -576,24 +709,42 @@ h3 {
   .nav {
     min-height: auto;
     padding-block: 0.9rem;
-    align-items: flex-start;
   }
 
-  .brand-link span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
+  .brand-link .tagline {
+    display: none;
+  }
+
+  .wordmark {
+    font-size: 1.15rem;
+  }
+
+  .nav {
+    gap: 0.6rem;
+  }
+
+  .brand-link {
+    gap: 0.5rem;
+  }
+
+  .brand-link .mark {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: none;
   }
 
   .nav ul {
-    gap: 0.8rem;
+    gap: 0.6rem;
   }
 
   .nav ul a {
-    font-size: 0.74rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
   }
 
   .hero {
