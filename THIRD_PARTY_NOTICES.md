@@ -16,7 +16,7 @@ in the generated Pages artifact, and the license text is published at
 
 The locked macOS Apple-silicon development graph includes
 `@img/sharp-libvips-darwin-arm64` as an optional, transitive platform package through
-Astro 7.2.8 and Sharp 0.35.5. The package contains libvips and declares
+Astro 7.4.2 and Sharp 0.35.5. The package contains libvips and declares
 `LGPL-3.0-or-later`.
 
 - Source: <https://github.com/lovell/sharp-libvips>
@@ -33,7 +33,7 @@ must be reassessed before publication.
 ## @img/sharp-libvips-linux-x64 1.3.4
 
 The locked Ubuntu x64 CI graph includes the corresponding optional libvips platform
-package through Astro 7.2.8 and Sharp 0.35.5. It also declares `LGPL-3.0-or-later`.
+package through Astro 7.4.2 and Sharp 0.35.5. It also declares `LGPL-3.0-or-later`.
 
 - Source: <https://github.com/lovell/sharp-libvips>
 - License terms: <https://www.gnu.org/licenses/lgpl-3.0.html>
