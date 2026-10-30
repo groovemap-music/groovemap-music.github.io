@@ -166,7 +166,7 @@ test('documents current Pages, DNS, and brand ownership', async () => {
   assert.match(readme, /github\.com\/groovemap-music\/automation/u);
   assert.match(runbook, /groovemap-music\/groovemap-music\.github\.io/u);
   assert.match(runbook, /groovemap-music\/infra/u);
-  assert.match(runbook, /SimplicityGuy\/homelab/u);
+  assert.match(runbook, /SimplicityGuy\/cloud/u);
   assert.match(runbook, /dig \+short groovemap\.music A/u);
   assert.match(runbook, /https:\/\/www\.groovemap\.music\//u);
   assert.equal(provenance.canonicalRepository, designRepository);

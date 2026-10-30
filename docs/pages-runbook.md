@@ -4,14 +4,24 @@ The site uses GitHub Actions to deploy the static Astro build from `main`:
 
 - deployment workflow: [`.github/workflows/pages.yml`](../.github/workflows/pages.yml);
 - custom domain: `groovemap.music`;
-- Pages configuration owner: the private `groovemap-music/infra` repository;
-- DNS configuration owner: the private `SimplicityGuy/homelab` Cloudflare OpenTofu module; and
+- Pages configuration owner: the private `groovemap-music/infra` repository
+  (`tofu/pages.tf`: workflow build, `groovemap.music` custom domain, HTTPS enforced);
+- DNS configuration owner: the private `SimplicityGuy/cloud` repository
+  (`infra/opentofu/cloudflare/cloudflare_dns_external.tf`); and
 - canonical output: static files under `dist/`.
+
+Both owner repositories are private, so you may not be able to open them. The site is live
+today. The DNS records (apex A/AAAA, `www` CNAME, and the GitHub Pages verification TXT) are
+created only while `cloudflare_zone_groovemap` and
+`groovemap_github_pages_verification_token` are set in the `cloud` repository.
 
 Do not edit Pages or DNS settings in provider dashboards. Review the corresponding
 OpenTofu plan before each apply.
 
 ## Change sequence
+
+The site is already live with HTTPS enforced. Follow this sequence when moving to a new
+domain or rebuilding the setup from scratch.
 
 1. Revalidate the tree for secrets, licensing, attribution, accessibility, metadata,
    canonical URLs, and intended public exposure.

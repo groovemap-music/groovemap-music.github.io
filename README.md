@@ -16,9 +16,12 @@ versions (`.mise.toml`).
 ```sh
 mise install
 just setup   # npm ci: install exactly what package-lock.json lists
-just dev     # start the local dev server
+just dev     # start the local dev server; open the URL it prints
 just check   # run every check before you open a pull request
 ```
+
+The package lock is authoritative. `just setup` uses `npm ci`; do not replace it with an
+unlocked install in CI.
 
 ## Architecture boundary
 
@@ -37,11 +40,6 @@ That file also records each source path and SHA-256 digest. Set
 promotion command refuses any other revision. Use of the GrooveMap name and logos is
 governed separately by the design repository's
 [trademark-use policy](https://github.com/groovemap-music/design/blob/main/TRADEMARKS.md).
-
-## Setup and development
-
-The package lock is authoritative. `just setup` uses `npm ci`; do not replace it with an
-unlocked install in CI.
 
 ## Validation and build
 
@@ -73,9 +71,15 @@ environment, deployment concurrency, and job-scoped minimum permissions (`conten
 read` for validation/build; `pages: write` and `id-token: write` for deployment).
 
 `public/CNAME` documents the custom domain and follows Astro's deployment guidance. Pages
-settings are managed from the private `groovemap-music/infra` repository; Cloudflare
-records are managed from the homelab Cloudflare module. A CNAME file alone does not
-mutate either system.
+settings are managed from the private `groovemap-music/infra` repository (`tofu/pages.tf`);
+the Cloudflare DNS records are managed from the private `SimplicityGuy/cloud` repository
+(`infra/opentofu/cloudflare/cloudflare_dns_external.tf`). Both repositories are private, so
+you may not be able to open them. A CNAME file alone does not mutate either system.
+
+The site is live at <https://groovemap.music>. Its apex and `www` DNS records, and the
+GitHub Pages domain-verification record, are created only when the
+`cloudflare_zone_groovemap` and `groovemap_github_pages_verification_token` variables are
+set in that repository.
 
 ## Versioning, release, and license
 
