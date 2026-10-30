@@ -4,6 +4,22 @@ This is the static Astro source for [groovemap.music](https://groovemap.music), 
 organization website for `groovemap-music`. It introduces GrooveMap's music knowledge
 graph and links visitors to the project's public work.
 
+This README is for contributors who want to run, change, or deploy the site. Visitors
+can just open the site. The site is plain static pages: no server, no accounts, no
+secrets.
+
+## Quick start
+
+You need [mise](https://mise.jdx.dev) to install the pinned Node, npm, and `just`
+versions (`.mise.toml`).
+
+```sh
+mise install
+just setup   # npm ci: install exactly what package-lock.json lists
+just dev     # start the local dev server
+just check   # run every check before you open a pull request
+```
+
 ## Architecture boundary
 
 Astro prerenders every route to static HTML. There is no server adapter, client-side
@@ -23,14 +39,6 @@ governed separately by the design repository's
 [trademark-use policy](https://github.com/groovemap-music/design/blob/main/TRADEMARKS.md).
 
 ## Setup and development
-
-Install the pinned toolchain with mise, then use the stable `just` interface:
-
-```sh
-mise install
-just setup
-just dev
-```
 
 The package lock is authoritative. `just setup` uses `npm ci`; do not replace it with an
 unlocked install in CI.
