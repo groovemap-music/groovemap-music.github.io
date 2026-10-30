@@ -76,10 +76,11 @@ the Cloudflare DNS records are managed from the private `SimplicityGuy/cloud` re
 (`infra/opentofu/cloudflare/cloudflare_dns_external.tf`). Both repositories are private, so
 you may not be able to open them. A CNAME file alone does not mutate either system.
 
-The site is live at <https://groovemap.music>. Its apex and `www` DNS records, and the
-GitHub Pages domain-verification record, are created only when the
-`cloudflare_zone_groovemap` and `groovemap_github_pages_verification_token` variables are
-set in that repository.
+The site is live at <https://groovemap.music>. In that repository, the GitHub Pages
+domain-verification record is created only when `cloudflare_zone_groovemap` and
+`groovemap_github_pages_verification_token` are set. The apex A/AAAA and `www` CNAME
+records are created only when `groovemap_pages_dns_approved` is `true` (default `false`;
+it requires the zone to be set).
 
 ## Versioning, release, and license
 

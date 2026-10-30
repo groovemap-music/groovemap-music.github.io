@@ -11,9 +11,10 @@ The site uses GitHub Actions to deploy the static Astro build from `main`:
 - canonical output: static files under `dist/`.
 
 Both owner repositories are private, so you may not be able to open them. The site is live
-today. The DNS records (apex A/AAAA, `www` CNAME, and the GitHub Pages verification TXT) are
-created only while `cloudflare_zone_groovemap` and
-`groovemap_github_pages_verification_token` are set in the `cloud` repository.
+today. In the `cloud` repository, the GitHub Pages verification TXT record is created only
+when `cloudflare_zone_groovemap` and `groovemap_github_pages_verification_token` are set. The
+apex A/AAAA and `www` CNAME records are created only when `groovemap_pages_dns_approved` is
+`true` (default `false`; it requires the zone to be set).
 
 Do not edit Pages or DNS settings in provider dashboards. Review the corresponding
 OpenTofu plan before each apply.
@@ -27,7 +28,8 @@ domain or rebuilding the setup from scratch.
    canonical URLs, and intended public exposure.
 2. Update the GitHub Pages configuration in `groovemap-music/infra` before changing DNS.
 3. Inventory the live apex and `www` DNS records, TTLs, provider, and rollback values.
-4. Review and approve the complete DNS plan before applying it.
+4. Review and approve the complete DNS plan before applying it. Setting
+   `groovemap_pages_dns_approved = true` is the approval step for the apex and `www` records.
 5. After DNS propagates, verify the Pages URL, apex and `www` behavior, certificate
    issuance, asset paths, internal links, responsive layout, and the 404 page.
 6. Enable HTTPS enforcement only after certificate health is confirmed.
