@@ -124,6 +124,7 @@ async function validateStaticContract(report) {
   for (const expectedPath of [
     '/index.html',
     '/about/index.html',
+    '/self-host/index.html',
     '/404.html',
     '/sitemap-index.xml',
   ]) {
@@ -153,8 +154,8 @@ export async function validateSite() {
   const htmlFiles = (await filesUnder(outputRoot)).filter((file) =>
     file.endsWith('.html'),
   );
-  if (htmlFiles.length !== 3)
-    report(`expected 3 generated HTML pages, found ${htmlFiles.length}`);
+  if (htmlFiles.length !== 4)
+    report(`expected 4 generated HTML pages, found ${htmlFiles.length}`);
 
   await Promise.all(
     htmlFiles.map((file) => validateHtmlFile(file, htmlValidate, report)),

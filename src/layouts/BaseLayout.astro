@@ -153,6 +153,14 @@ const currentPath = Astro.url.pathname;
             </a>
           </li>
           <li>
+            <a
+              href="/self-host/"
+              aria-current={currentPath === '/self-host/' ? 'page' : undefined}
+            >
+              Self-host
+            </a>
+          </li>
+          <li>
             <a href="https://github.com/groovemap-music">GitHub</a>
           </li>
         </ul>
@@ -209,6 +217,8 @@ const currentPath = Astro.url.pathname;
           <a href="https://github.com/groovemap-music">Source on GitHub</a>
           <span aria-hidden="true"> · </span>
           <a href="/about/">About the project</a>
+          <span aria-hidden="true"> · </span>
+          <a href="/self-host/">Self-host</a>
         </p>
       </div>
     </footer>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const guide =
+  'https://github.com/groovemap-music/deployment/blob/main/docs/homelab.md';
+const repository = 'https://github.com/groovemap-music/deployment';
+---
+
+<BaseLayout
+  title="Run GrooveMap in your homelab"
+  description="See what it takes to self-host GrooveMap on your own Docker host, and follow the homelab guide or let an AI agent set it up."
+  path="/self-host/"
+>
+  <article class="article shell">
+    <header class="article-heading">
+      <p class="eyebrow">Self-host GrooveMap</p>
+      <h1>Run GrooveMap in your homelab.</h1>
+      <p class="lede">
+        GrooveMap is a self-hosted music knowledge graph built from the Discogs
+        and MusicBrainz datasets. If you have a Docker host with room to spare,
+        you can run your own copy.
+      </p>
+    </header>
+
+    <div class="article-grid">
+      <section aria-labelledby="involves-heading">
+        <h2 id="involves-heading">What it involves</h2>
+        <ul class="requirements">
+          <li>
+            <strong>A Docker host.</strong> Docker Engine with Docker Compose
+            v2.
+          </li>
+          <li>
+            <strong>An amd64 machine.</strong> The images are built for
+            <code>linux/amd64</code> only.
+          </li>
+          <li>
+            <strong>Memory and disk.</strong> Plan on a machine in the 16 GB of
+            memory and 100 GB of free disk class, with more recommended. The
+            guide has the current numbers.
+          </li>
+          <li>
+            <strong>Patience on the first load.</strong> Importing the datasets
+            takes hours, up to about two days. It can be interrupted and
+            resumed.
+          </li>
+        </ul>
+      </section>
+      <section aria-labelledby="paths-heading">
+        <h2 id="paths-heading">Two ways to start</h2>
+        <p>
+          <strong>One command.</strong> The deployment repository checks your
+          host, sets up configuration and secrets, starts the stack, and prints
+          your URLs when the import is done.
+        </p>
+        <p>
+          <strong>Let an AI agent do it.</strong> In Claude Code, the
+          <code>groovemap-homelab</code> plugin fits GrooveMap into your reverse
+          proxy, storage, and ports. Add it with
+          <code>/plugin marketplace add groovemap-music/deployment</code>, then
+          <code>/plugin install groovemap-homelab@groovemap</code>.
+        </p>
+      </section>
+      <section aria-labelledby="guide-heading">
+        <h2 id="guide-heading">Read the guide first</h2>
+        <p>
+          The homelab guide is the source of truth for sizing, ports, reverse
+          proxies, upgrades, and known limitations. Check it before you commit a
+          machine to the first load.
+        </p>
+        <div class="actions">
+          <a class="button primary" href={guide}>
+            Read the homelab guide
+          </a>
+          <a class="button secondary" href={repository}>
+            Open the deployment repository
+          </a>
+        </div>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
