@@ -134,9 +134,11 @@ test('builds once before license validation in the local check DAG', async () =>
 test('keeps public copy current and out of internal transition language', async () => {
   const publicCopy = (
     await Promise.all(
-      ['src/pages/index.astro', 'src/pages/about/index.astro'].map((file) =>
-        readFile(path.join(repositoryRoot, file), 'utf8'),
-      ),
+      [
+        'src/pages/index.astro',
+        'src/pages/about/index.astro',
+        'src/pages/self-host/index.astro',
+      ].map((file) => readFile(path.join(repositoryRoot, file), 'utf8')),
     )
   ).join('\n');
 
