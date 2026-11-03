@@ -1,0 +1,4 @@
+Contact: mailto:security@simplicityguy.com
+Expires: 2027-11-02T00:00:00Z
+Preferred-Languages: en
+Canonical: https://groovemap.music/.well-known/security.txt
