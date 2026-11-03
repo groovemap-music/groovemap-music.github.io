@@ -114,6 +114,24 @@ async function validateStaticContract(report) {
       report(`${relativePath} does not match the approved static contract`);
   }
 
+  // RFC 9116: GitHub Pages serves the site, so it must publish security.txt
+  // itself (Cloudflare can't on a DNS-only zone). Renew Expires before it lapses.
+  const securityTxt = await readFile(
+    path.join(outputRoot, '.well-known', 'security.txt'),
+    'utf8',
+  );
+  for (const field of [
+    'Contact: mailto:security@simplicityguy.com',
+    'Preferred-Languages: en',
+    'Canonical: https://groovemap.music/.well-known/security.txt',
+  ]) {
+    if (!securityTxt.split('\n').includes(field))
+      report(`.well-known/security.txt is missing "${field}"`);
+  }
+  const expires = /^Expires: (.+)$/mu.exec(securityTxt)?.[1];
+  if (!expires || !(Date.parse(expires) > Date.now()))
+    report('.well-known/security.txt needs an Expires date in the future');
+
   const manifest = await readJson(path.join(outputRoot, 'site.webmanifest'));
   if (manifest.name !== 'GrooveMap' || manifest.start_url !== undefined) {
     report(
