@@ -51,7 +51,9 @@ secret-scan:
 
 # Network access is intentional and separate from check.
 audit:
-    {{npm}} audit --audit-level=high
+    # npm exec exports allowScripts as a CLI-only setting that npm audit rejects.
+    # Clear it only for the audit child; package installation keeps its policy.
+    {{npm}} exec --yes --package=audit-ci@7.1.0 -- env -u npm_config_allow_scripts audit-ci --config audit-ci.json
 
 # The site has no installable package. Validate the artifact produced by the
 # preceding build/package capability without rebuilding it.
